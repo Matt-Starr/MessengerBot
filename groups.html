@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Register Messenger Group</h1>
+
+<a href="index.html">
+    <button>back</button>
+</a>
+
+<h3>What is the Subject Code for the Chat?</h3>
+<p>Please enter in the format ABCD1234. For example: ENGG1810</p>
+<form name="frmGroups" method="POST" action="groups.php">
+    <label for="fname">Subject Code:</label>
+    <input type="text" id="subCode" name="subCode"><br><br>
+
+
+<!---insert list of all groups as buttons-->
+
+    <h3>What is the link for the Chat?</h3>
+    <p>Should be the link in your address bar when the chat is open in a browser</p>
+    <p>e.g. https://www.messenger.com/t/2352568964851898</p>
+    <label for="fname">Chat Link:</label>
+    <input type="text" id="GroupLink" name="GroupLink"><br><br>
+    <input type="submit" name="Submit" id="Submit" value="Submit">
+</form>
+ 
+</body>
+</html>
