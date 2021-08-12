@@ -45,6 +45,23 @@
     <input type="text" id="fbId" name="fbId"><br><br>
     <input type="submit" value="Submit">
 </form>
+<h3>Current Waitlist:</h3>
+<?php
+$waitlist = fopen('Resources\Waitlist.csv', 'r');
+$stack = array();
+while(! feof($waitlist))
+        {
+            // print out the given column of the line
+            array_push($stack, fgetcsv($waitlist));
+        }
+fclose($waitlist);
+foreach($stack as $item){
+    $checker = gettype($item);
+    if ($checker == 'array') {
+        echo implode(' , ',$item).'<br><br>';
+    }
+}
+?>
 
 </body>
-</html> 
+</html>

@@ -11,16 +11,17 @@ def add_person(personId, reqestedGroup):
     j = -1
     for i in data:
         j += 1
-        print("i[0]", i[0])
         if i[0] == reqestedGroup:
             #open chat page and wait to load
             driver.get(i[1])
-            print('i[1]', i[1])
             time.sleep(4)
             if i[2] == 'False':
-                chatInput = driver.find_element_by_xpath('/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div/div/div/div[2]/div/form/div/div[3]/div[2]/div[1]/div/div/div/div/div[2]/div')
-                chatInput.send_keys("This is a calibration message")
-                chatInput.send_keys(Keys.RETURN)
+                try:
+                    chatInput = driver.find_element_by_xpath('/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div/div/div/div[2]/div/form/div/div[3]/div[2]/div[1]/div/div/div/div/div[2]/div')
+                    chatInput.send_keys("This is a calibration message")
+                    chatInput.send_keys(Keys.RETURN)
+                except:
+                    return 1
                 time.sleep(1)
                 driver.get(i[1])
                 time.sleep(3)
@@ -64,12 +65,15 @@ def add_person(personId, reqestedGroup):
                     inputElement.send_keys(personId)
 
             time.sleep(2)
-            personToAddButton = driver.find_element_by_xpath("/html/body/div[1]/div/div/div/div[3]/div/div/div[1]/div/div[2]/div/div/div/div[3]/div/div[3]/div/div[1]/div/div/div/div")
-            personToAddButton.click()
-            time.sleep(0.5)
-            addPersonButton = driver.find_element_by_xpath("/html/body/div[1]/div/div/div/div[3]/div/div/div[1]/div/div[2]/div/div/div/div[4]/div/div/div")
-            addPersonButton.click()
-            return 0
+            try:
+                personToAddButton = driver.find_element_by_xpath("/html/body/div[1]/div/div/div/div[3]/div/div/div[1]/div/div[2]/div/div/div/div[3]/div/div[3]/div/div[1]/div/div/div/div")
+                personToAddButton.click()
+                time.sleep(0.5)
+                addPersonButton = driver.find_element_by_xpath("/html/body/div[1]/div/div/div/div[3]/div/div/div[1]/div/div[2]/div/div/div/div[4]/div/div/div")
+                addPersonButton.click()
+                return 0
+            except:
+                return 1
 
 #Open Messenger in a new window
 chrome_options = Options()
@@ -91,12 +95,25 @@ while True:
         personId = waitlist[0][0]
         requestedGroup = waitlist[0][1]
         print('personId',personId,'requestedGroup',requestedGroup)
-        add_person(personId, requestedGroup)
+        add = add_person(personId, requestedGroup)
         #remove person from wait list
-        waitlist.pop(0)
+        if add == 0:
+            with open('Resources\Waitlist.csv', newline='') as f:
+                reader = csv.reader(f)
+                waitlist = list(reader)
+            waitlist.pop(0)
+        elif add == 1:
+            with open('Resources\Waitlist.csv', newline='') as f:
+                reader = csv.reader(f)
+                waitlist = list(reader)
+            x = waitlist[0]
+            print(x)
+            waitlist.pop(0)
+            waitlist.append(x)
         with open('Resources\Waitlist.csv', 'w', encoding='UTF8', newline='') as f:
             writer = csv.writer(f)
             for i in waitlist:
                 writer.writerow(i)
+
     else:
         time.sleep(5)
